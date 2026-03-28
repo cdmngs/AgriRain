@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Location - AgriRain</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header class="step-header">
+  <i class="fas fa-home header-icon"></i>
+</header>
+
+<div class="step-indicator">Step 1 of 3</div>
+
+<h1 class="main-heading">Select Location</h1>
+
+<div class="instruction">
+  <p class="instruction-title">Pin Your Farm Location</p>
+  <p class="instruction-desc">Select where you plan to plant rice</p>
+</div>
+
+<div class="search-bar">
+  <input type="text" id="locationInput" placeholder="Search Location">
+  <button id="saveLocationBtn">Save</button>
+</div>
+
+<div class="map-area">
+  <i class="fas fa-map-marker-alt map-pin"></i>
+  <p id="locationName">Mudboron, Alangalang, Leyte, Region VIII, Philippines</p>
+  <p id="latlong">Lat: 11.12345, Long: 124.56789</p>
+</div>
+
+<button class="current-location-btn" id="currentLocationBtn">
+  <i class="fas fa-paper-plane"></i> Use My Current Location
+</button>
+
+<div class="selected-location" id="selectedLocationDisplay">
+  Selected Location: None
+</div> <br>
+
+<button class="next-btn" id="nextBtn">
+  <i class="fas fa-arrow-right"></i>
+</button>
+
+<footer class="step-footer">
+  © 2026 AgriRain. All rights reserved.
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

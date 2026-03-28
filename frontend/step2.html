@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Date - AgriRain</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="step-header">
+  <i class="fas fa-home header-icon"></i>
+</header>
+
+<div class="step-indicator">Step 2 of 3</div>
+
+<h1 class="main-heading">Select Date</h1>
+
+<div class="instruction">
+  <p class="instruction-title">Choose When to Plant</p>
+  <p class="instruction-desc">Pick a date to analyze weather conditions</p>
+</div>
+
+<div class="date-picker">
+  <input type="date" id="plantDate">
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <button type="button" id="prevMonth">‹</button>
+      <span id="monthYear"></span>
+      <button type="button" id="nextMonth">›</button>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+</div> <br>
+
+<button class="primary" id="analyzeBtn">Analyze Weather</button>
+
+<footer class="step-footer">
+  © 2026 AgriRain. All rights reserved.
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
