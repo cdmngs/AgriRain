@@ -24,13 +24,29 @@ const locationInput = document.getElementById("locationInput");
 const selectedLocationDisplay = document.getElementById("selectedLocationDisplay");
 const locationName = document.getElementById("locationName");
 const latlong = document.getElementById("latlong");
+const searchResults = document.getElementById("searchResults");
 
 if(saveLocationBtn){
-  saveLocationBtn.addEventListener("click", () => {
+  saveLocationBtn.addEventListener("click", async () => {
     const location = locationInput.value.trim();
     if(!location){ alert("Please enter a location!"); return; }
-    localStorage.setItem("location", location);
-    selectedLocationDisplay.textContent = "Selected Location: " + location;
+    // Validate if location is in Philippines
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&limit=1&countrycodes=PH`);
+      const data = await response.json();
+      if(data.length === 0){
+        alert("Invalid location. Please select a location from the search results or enter a valid Philippine location.");
+        return;
+      }
+      // Save the validated location
+      localStorage.setItem("location", data[0].display_name);
+      selectedLocationDisplay.textContent = "Selected Location: " + data[0].display_name;
+      locationName.textContent = data[0].display_name;
+      latlong.textContent = "Lat: " + data[0].lat + ", Long: " + data[0].lon;
+    } catch (error) {
+      console.error("Error validating location:", error);
+      alert("Error validating location. Please try again.");
+    }
   });
 }
 
@@ -45,6 +61,53 @@ if(currentLocationBtn){
         latlong.textContent = "Lat: " + pos.coords.latitude + ", Long: " + pos.coords.longitude;
       }, ()=>{ alert("Permission denied or error fetching location"); });
     } else { alert("Geolocation not supported"); }
+  });
+}
+
+// Search functionality
+if(locationInput && searchResults){
+  locationInput.addEventListener("input", async (e) => {
+    const query = e.target.value.trim();
+    if(query.length < 3){
+      searchResults.style.display = "none";
+      return;
+    }
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&countrycodes=PH`);
+      const data = await response.json();
+      searchResults.innerHTML = "";
+      if(data.length === 0){
+        searchResults.innerHTML = '<div class="no-results">No results found</div>';
+        searchResults.style.display = "block";
+      } else {
+        data.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "result-item";
+          div.textContent = item.display_name;
+          div.addEventListener("click", () => {
+            locationInput.value = item.display_name;
+            localStorage.setItem("location", item.display_name);
+            selectedLocationDisplay.textContent = "Selected Location: " + item.display_name;
+            locationName.textContent = item.display_name;
+            latlong.textContent = "Lat: " + item.lat + ", Long: " + item.lon;
+            searchResults.style.display = "none";
+          });
+          searchResults.appendChild(div);
+        });
+        searchResults.style.display = "block";
+      }
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      searchResults.innerHTML = '<div class="no-results">Error fetching results</div>';
+      searchResults.style.display = "block";
+    }
+  });
+
+  // Hide results when clicking outside
+  document.addEventListener("click", (e) => {
+    if(!locationInput.contains(e.target) && !searchResults.contains(e.target)){
+      searchResults.style.display = "none";
+    }
   });
 }
 
